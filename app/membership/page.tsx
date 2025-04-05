@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Info } from "lucide-react"
+import { createClient} from "@/utils/supabase/client"
 
 // Mock API call for OTP generation
 const generateOTP = async (type: "email" | "phone", value: string) => {
@@ -21,11 +22,13 @@ const generateOTP = async (type: "email" | "phone", value: string) => {
 
 export default function MembershipPage() {
   const router = useRouter()
+  const supabase=createClient();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    address: "",
+    profession:"",
+    street: "",
     city: "",
     state: "",
     country: "",
@@ -66,7 +69,7 @@ export default function MembershipPage() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!emailOTPSent || !phoneOTPSent) {
       toast({
@@ -84,8 +87,34 @@ export default function MembershipPage() {
       })
       return
     }
+    const { data:applicantData, error: insertError } = await supabase
+    .from("Applicants")
+    .insert([
+      {
+        name: formData.name,
+        email_id: formData.email,
+        phone_no: formData.phone,
+        profession:formData.profession,
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
+        pincode: Number(formData.pincode),
+        approved: false, // pending admin approval
+        // Optionally, handle documents upload separately (e.g., store URLs)
+      },
+    ])
+    if (insertError) {
+      toast({
+        title: "Error",
+        description: insertError.message,
+        variant: "destructive",
+      })
+      return
+    }
+    console.log(applicantData)
     // Store form data in localStorage (in a real app, consider more secure options)
-    localStorage.setItem("membershipFormData", JSON.stringify(formData))
+    // localStorage.setItem("membershipFormData", JSON.stringify(formData))
     // In a real application, you would send the form data and documents to your backend here
     toast({
       title: "Application Submitted",
@@ -176,10 +205,24 @@ export default function MembershipPage() {
             </div>
           </div>
           <div className="space-y-2">
+            <Label htmlFor="profession" className="text-[#4A2C2A]">
+              Profession
+            </Label>
+            <Input
+              id="profession"
+              name="profession"
+              value={formData.profession}
+              onChange={handleInputChange}
+              placeholder="Enter your profession"
+              required
+              className="border-[#B22222]"
+            />
+          </div>
+          <div className="space-y-2">
             <Label className="text-[#4A2C2A]">Address</Label>
             <Input
-              name="address"
-              value={formData.address}
+              name="street"
+              value={formData.street}
               onChange={handleInputChange}
               placeholder="Street Address"
               required
