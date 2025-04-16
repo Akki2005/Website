@@ -120,33 +120,54 @@ function AdminDashboard() {
               {approvalRequests.length === 0 ? (
                 <p>No pending approval requests.</p>
               ) : (
-                <ul className="space-y-4">
-                  {approvalRequests.map((request) => (
-                    <li key={request.id} className="flex items-center justify-between border-b pb-2">
-                      <div>
-                        <p className="font-semibold">
-                          {request.type === "password" ? "Password Change" : "Profile Update"}
-                        </p>
-                        <p className="text-sm">User ID: {request.userId}</p>
-                        <p className="text-sm">{request.details}</p>
-                      </div>
-                      <div className="space-x-2">
-                        <Button
-                          onClick={() => handleApproveRequest(request.id)}
-                          className="bg-green-600 text-white hover:bg-green-700"
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          onClick={() => handleRejectRequest(request.id)}
-                          className="bg-red-600 text-white hover:bg-red-700"
-                        >
-                          Reject
-                        </Button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                // <ul className="space-y-4">
+                //   {approvalRequests.map((request) => (
+                //     <li key={request.id} className="flex items-center justify-between border-b pb-2">
+                //       <div>
+                //         <p className="font-semibold">
+                //           {request.type === "password" ? "Password Change" : "Profile Update"}
+                //         </p>
+                //         <p className="text-sm">User ID: {request.userId}</p>
+                //         <p className="text-sm">{request.details}</p>
+                //       </div>
+                //       <div className="space-x-2">
+                //         <Button
+                //           onClick={() => handleApproveRequest(request.id)}
+                //           className="bg-green-600 text-white hover:bg-green-700"
+                //         >
+                //           Approve
+                //         </Button>
+                //         <Button
+                //           onClick={() => handleRejectRequest(request.id)}
+                //           className="bg-red-600 text-white hover:bg-red-700"
+                //         >
+                //           Reject
+                //         </Button>
+                //       </div>
+                //     </li>
+                //   ))}
+                // </ul>
+                <>
+                  <div className="flex gap-4">
+                    <Link href="/admin/new-members" className="w-full">
+                      <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">
+                         New Memebers approvals
+                      </Button>
+                    </Link>
+                  
+                    <Link href="/admin/new-members" className="w-full">
+                      <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">
+                        Password change requests
+                      </Button>
+                    </Link>
+
+                    <Link href="/admin/new-members" className="w-full">
+                      <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">
+                         Profile Update Requests
+                      </Button>
+                    </Link>
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
@@ -183,6 +204,9 @@ function AdminDashboard() {
             </Link>
             <Link href="/admin/contributors">
               <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">Manage Contributors</Button>
+            </Link>
+            <Link href="/admin/about/footprints">
+              <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">Edit Footprints</Button>
             </Link>
           </div>
         </div>
