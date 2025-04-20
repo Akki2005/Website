@@ -39,7 +39,6 @@ const convertDate = (date: Date | string) => {
 
 function ManageEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const supabase = createClient();
   const [newTitle, setNewTitle] = useState("");
   const [newFromDate, setNewFromDate] = useState("");
   const [newToDate, setNewToDate] = useState<Date | null>(null);
@@ -48,7 +47,7 @@ function ManageEventsPage() {
   const [newFromTime, setNewFromTime] = useState("");
   const [newToTime, setNewToTime] = useState("");
   const [minDate, setMinDate] = useState("");
-
+  const supabase = createClient();
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setMinDate(today);

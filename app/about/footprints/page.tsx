@@ -103,7 +103,7 @@ export default function FootprintsPage() {
         description: "Failed to fetch footprints",
         variant: "destructive",
       });
-      // setLoading(false);
+     
       return;
     }
    

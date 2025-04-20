@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
 import { withAdminAuth } from "@/lib/auth"
+import CommunityPage from "@/app/admin/about/community/page"
 
 interface ApprovalRequest {
   id: string
@@ -76,7 +77,8 @@ function AdminDashboard() {
           </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="bg-white border-2 border-[#B22222]">
+          <CommunityPage/>
+          {/* <Card className="bg-white border-2 border-[#B22222]">
             <CardHeader>
               <CardTitle className="text-[#B22222]">Customize About Content</CardTitle>
             </CardHeader>
@@ -93,7 +95,7 @@ function AdminDashboard() {
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
           <Card className="bg-white border-2 border-[#B22222]">
             <CardHeader>
               <CardTitle className="text-[#B22222]">Customize Contact Information</CardTitle>
@@ -196,9 +198,9 @@ function AdminDashboard() {
             <Link href="/admin/carousel">
               <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">Edit Carousel</Button>
             </Link>
-            <Link href="/admin/navigation">
+            {/* <Link href="/admin/navigation">
               <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">Edit Navigation</Button>
-            </Link>
+            </Link> */}
             <Link href="/admin/welcome-hero">
               <Button className="w-full bg-[#B22222] text-white hover:bg-[#8B0000]">Edit Welcome Hero</Button>
             </Link>
