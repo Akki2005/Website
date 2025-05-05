@@ -17,115 +17,111 @@ import Link from "next/link";
 import { withAdminAuth } from "@/app/components/withAdminAuth";
 import { createClient } from "@/utils/supabase/client";
 
-interface Announcement {
+interface Footprint {
   id: number;
-  name: string;
-  description: string;
-  date:number;
+  event_name: string;
+  event_desc: string;
+  event_year:number;
 }
 
-function ManageAnnouncementsPage() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newContent, setNewContent] = useState("");
-  const [newCategory, setNewCategory] = useState("");
-
+function ManageFootprintsPage() {
+  const [footprints, setFootprints] = useState<Footprint[]>([]);
   const supabase = createClient();
+  const [newTitle, setNewTitle] = useState("");
+  const [newYear, setNewYear] = useState("");
+  const [newContent, setNewContent] = useState("");
 
-  const fetchAnnouncements = async () => {
-    const { data: announcementData, error: announcementError } = await supabase
-      .from("Announcements")
-      .select("*");
-
-    if (announcementError) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch Announcements",
-        variant: "destructive",
-      });
-      return;
-    } else {
-      setAnnouncements(announcementData);
+    const fetchFootprints=async()=>{
+        const {data:footprintData,error:footprintError}=await supabase
+        .from("Footprints")
+        .select("*")
+        
+        
+        if(footprintError){
+            toast({
+                title:"Error",
+                description:"Failed to fetch footprints",
+                variant:"destructive",
+            });
+            return;
+        }
+        else{
+            setFootprints(footprintData);
+        }
     }
+  const handleAddFootprint = async () => {
+        const {data:insertData,error:insertError}=await supabase
+        .from("Footprints")
+        .insert({
+            event_year:newYear,
+            event_name:newTitle,
+            event_desc:newContent,
+        })
+        if(insertError){
+            toast({
+                    title: "Error",
+                    description: "Failed to Add Footprint.",
+                    variant: "destructive",
+                  });
+                  return ;
+        }
+        else{
+            toast({
+                title: "Success",
+                description: "Footprint added successfully.",
+              });
+        }
+      setNewTitle("");
+      setNewContent("");
+      setNewYear("")
+      
+    fetchFootprints()
   };
 
-  const handleAddAnnouncement = async () => {
-    const { data: insertData, error: insertError } = await supabase
-      .from("Announcements")
-      .insert({
-        name: newTitle,
-        description: newContent,
-        category: newCategory,
-      });
-    if (insertError) {
-      toast({
-        title: "Error",
-        description: "Failed to Add Announcement.",
-        variant: "destructive",
-      });
-      return;
-    } else {
-      toast({
-        title: "Success",
-        description: "Announcement added successfully.",
-      });
+  const handleDeletefootprints = async (id: number) => {
+    const {error:deleteError}=await supabase
+    .from("Footprints")
+    .delete()
+    .eq("id",id)
+    if(deleteError){
+        toast({
+                title: "Error",
+                description: "Failed to Delete Footprint.",
+                variant: "destructive",
+              });
+              return ;
     }
-    setNewTitle("");
-    setNewContent("");
-    setNewCategory("");
-    toast({
-      title: "Success",
-      description: "Announcement added successfully.",
-    });
-    fetchAnnouncements();
-  };
-
-  const handleDeleteAnnouncement = async (id: number) => {
-    const { error: deleteError } = await supabase
-      .from("Announcements")
-      .delete()
-      .eq("id", id);
-    if (deleteError) {
-      toast({
-        title: "Error",
-        description: "Failed to Delete Announcement.",
-        variant: "destructive",
-      });
-      return;
-    } else {
-      toast({
-        title: "Success",
-        description: "Announcement deleted successfully.",
-      });
+    else{
+        toast({
+            title: "Success",
+            description: "Footprint deleted successfully.",
+          });
     }
-    fetchAnnouncements();
+    fetchFootprints()
   };
-
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
+   useEffect(() => {
+      fetchFootprints();
+    }, []);
+ 
   return (
     <div className="min-h-screen bg-[#FFF9E6] py-8 px-4">
       <div className="container mx-auto">
         <Card className="bg-white border-2 border-[#B22222] mb-8">
           <CardHeader>
-            <CardTitle className="text-[#B22222]">
-              Manage Announcements
-            </CardTitle>
+            <CardTitle className="text-[#B22222]">Manage Footprints</CardTitle>
           </CardHeader>
           <CardContent>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleAddAnnouncement();
+                handleAddFootprint();
               }}
             >
               <div className="space-y-4">
-                <div className="flex justify-between gap-3 ">
+                <div className="flex gap-5">
                   <div className="space-y-2 w-full">
                     <Label htmlFor="newTitle" className="text-[#4A2C2A]">
-                      New Announcement Title
+                      Footprint name
                     </Label>
                     <Input
                       id="newTitle"
@@ -135,27 +131,32 @@ function ManageAnnouncementsPage() {
                       className="border-[#B22222]"
                     />
                   </div>
-                  <div className="space-y-2 w-full">
-                    <Label htmlFor="newCategory" className="text-[#4A2C2A]">
-                      New Announcement Category
+                  <div className="space-y-2">
+                    <Label htmlFor="year" className="text-[#4A2C2A]">
+                      Footprint Year
                     </Label>
                     <Input
-                      id="newCategory"
+                      id="year"
+                      value={newYear}
+                      type="number"
                       required
-                      value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value)}
+                      min="1900"
+                      max="2099"
+                      onChange={(e) => setNewYear(e.target.value)}
+                      placeholder="YYYY"
                       className="border-[#B22222]"
                     />
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="newContent" className="text-[#4A2C2A]">
-                    New Announcement Content
+                    Description
                   </Label>
                   <Textarea
                     id="newContent"
-                    required
                     value={newContent}
+                    required
                     onChange={(e) => setNewContent(e.target.value)}
                     className="border-[#B22222]"
                   />
@@ -164,32 +165,29 @@ function ManageAnnouncementsPage() {
                   type="submit"
                   className="bg-[#B22222] text-white hover:bg-[#8B0000]"
                 >
-                  Add Announcement
+                  Add Footprint
                 </Button>
               </div>
             </form>
           </CardContent>
         </Card>
         <div className="space-y-4">
-          <p className="text-[#4A2C2A] text-2xl font-bold">Announcements List:</p>
-          {announcements.map((announcement) => (
+          {footprints.map((footprints) => (
             <Card
-              key={announcement.id}
+              key={footprints.id}
               className="bg-white border-2 border-[#B22222]"
             >
               <CardHeader>
                 <CardTitle className="text-[#B22222]">
-                  {announcement.id}. {announcement.name} 
+                  {footprints.id}. {footprints.event_name} ({footprints.event_year})
                 </CardTitle>
               </CardHeader>
               <CardContent>
-              <p className="text-[#4A2C2A]"><span className="text-[#B22222]">Announced on:</span> {announcement.date} </p>
-              <br/>
-                <p className="text-[#4A2C2A]">{announcement.description}</p>
+                <p className="text-[#4A2C2A]">{footprints.event_desc}</p>
               </CardContent>
               <CardFooter>
                 <Button
-                  onClick={() => handleDeleteAnnouncement(announcement.id)}
+                  onClick={() => handleDeletefootprints(footprints.id)}
                   variant="destructive"
                   className="ml-auto"
                 >
@@ -214,4 +212,4 @@ function ManageAnnouncementsPage() {
   );
 }
 
-export default withAdminAuth(ManageAnnouncementsPage);
+export default withAdminAuth(ManageFootprintsPage);

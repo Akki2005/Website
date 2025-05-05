@@ -1,17 +1,41 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { createClient } from "@/utils/supabase/client"
+import { toast } from "@/components/ui/use-toast"
 
-const announcements = [
-  "Join us for the Annual Marathi Literature Festival next month!",
-  "New Marathi language classes starting soon. Register now!",
-  "Volunteers needed for the upcoming community clean-up drive.",
-  "Don't miss our traditional Marathi cuisine workshop this weekend!",
-]
+interface AnnouncementsData {
+  announcements: string[],
+  backgroundColor: string, // e.g. "#FF0000" or "red"
+  textColor: string        // e.g. "#FFFFFF" or "white"
+}
 
 export default function MovingAnnouncements() {
+  const supabase = createClient()
   const [position, setPosition] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [currentAnnouncements, setCurrentAnnouncements] = useState<AnnouncementsData>({
+    announcements: [],
+    backgroundColor: "#000000",  
+    textColor: "#FFFFFF"         
+  })
+
+  const fetchAnnouncements = async () => {
+    const { data: announcementData, error: announcementError } = await supabase
+      .from("MovingAnnouncement")
+      .select("*")
+      .single()
+
+    if (announcementError) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch Announcement.",
+        variant: "destructive",
+      })
+    } else {
+      setCurrentAnnouncements(announcementData)
+    }
+  }
 
   useEffect(() => {
     const container = containerRef.current
@@ -30,14 +54,24 @@ export default function MovingAnnouncements() {
     }
 
     const animationId = setInterval(animate, 20)
-
+    fetchAnnouncements()
     return () => clearInterval(animationId)
   }, [])
 
   return (
-    <div className="bg-primary text-primary-foreground py-2 overflow-hidden">
-      <div ref={containerRef} className="whitespace-nowrap" style={{ transform: `translateX(${position}px)` }}>
-        {announcements.map((announcement, index) => (
+    <div
+      className="py-2 overflow-hidden"
+      style={{
+        backgroundColor: currentAnnouncements.backgroundColor,
+        color: currentAnnouncements.textColor
+      }}
+    >
+      <div
+        ref={containerRef}
+        className="whitespace-nowrap"
+        style={{ transform: `translateX(${position}px)` }}
+      >
+        {currentAnnouncements.announcements.map((announcement, index) => (
           <span key={index} className="inline-block mx-4">
             {announcement}
           </span>
@@ -46,4 +80,3 @@ export default function MovingAnnouncements() {
     </div>
   )
 }
-

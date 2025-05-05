@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Info } from "lucide-react"
+import { createClient} from "@/utils/supabase/client"
+import { v4 as uuidv4 } from "uuid";
 
 // Mock API call for OTP generation
 const generateOTP = async (type: "email" | "phone", value: string) => {
@@ -21,11 +23,13 @@ const generateOTP = async (type: "email" | "phone", value: string) => {
 
 export default function MembershipPage() {
   const router = useRouter()
+  const supabase=createClient();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    address: "",
+    profession:"",
+    street: "",
     city: "",
     state: "",
     country: "",
@@ -33,6 +37,8 @@ export default function MembershipPage() {
   })
   const [emailOTPSent, setEmailOTPSent] = useState(false)
   const [phoneOTPSent, setPhoneOTPSent] = useState(false)
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [acknowledged, setAcknowledged] = useState(false)
   const [documents, setDocuments] = useState<File[]>([])
 
@@ -59,14 +65,75 @@ export default function MembershipPage() {
       })
     }
   }
-
+  const uploadFile = async (file: File): Promise<string | null> => {
+    try {
+      // Generate a unique filename
+      const uniqueFileName = `${uuidv4()}-${file.name}`;
+      
+      // Upload the file
+      const { data, error } = await supabase.storage
+        .from("documents")
+        .upload(uniqueFileName, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+      
+      if (error) {
+        console.error("Error uploading file:", error);
+        toast({
+          title: "Upload Error",
+          description: `Failed to upload ${file.name}: ${error.message}`,
+          variant: "destructive",
+        });
+        return null;
+      }
+      
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("documents")
+        .getPublicUrl(uniqueFileName);
+      
+      return publicUrl;
+    } catch (error) {
+      console.error("Unexpected error during upload:", error);
+      return null;
+    }
+  };
+  
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setDocuments(Array.from(e.target.files))
+      const filesArray = Array.from(e.target.files);
+      setDocuments(filesArray);
     }
-  }
+  };
+  const handleUploadDocuments = async () => {
+    if (documents.length === 0) {
+      // Optionally, add toast or message to prompt the user to select files
+      console.error("No files selected for upload.");
+      return;
+    }
 
-  const handleSubmit = (e: React.FormEvent) => {
+    setUploading(true);
+    try {
+      // Upload each selected file concurrently
+      const uploadedUrlsPromises = documents.map((file) => uploadFile(file));
+      const fileUrls = await Promise.all(uploadedUrlsPromises);
+
+      // Filter out failed uploads (null values)
+      const validFileUrls = fileUrls.filter((url): url is string => url !== null);
+      setUploadedUrls(validFileUrls);
+
+      console.log("Uploaded URLs:", validFileUrls, typeof(validFileUrls));
+      // You might show a toast message here indicating success.
+    } catch (error) {
+      console.error("An error occurred during the file upload process:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!emailOTPSent || !phoneOTPSent) {
       toast({
@@ -77,6 +144,29 @@ export default function MembershipPage() {
       return
     }
     if (documents.length === 0) {
+      // Optionally, add toast or message to prompt the user to select files
+      console.error("No files selected for upload.");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Upload each selected file concurrently
+      const uploadedUrlsPromises = documents.map((file) => uploadFile(file));
+      const fileUrls = await Promise.all(uploadedUrlsPromises);
+
+      // Filter out failed uploads (null values)
+      const validFileUrls = fileUrls.filter((url): url is string => url !== null);
+      setUploadedUrls(validFileUrls);
+
+      console.log("Uploaded URLs:", validFileUrls, typeof(validFileUrls));
+      // You might show a toast message here indicating success.
+    } catch (error) {
+      console.error("An error occurred during the file upload process:", error);
+    } finally {
+      setUploading(false);
+    }
+    if (uploadedUrls.length === 0) {
       toast({
         title: "Documents Required",
         description: "Please upload the required documents.",
@@ -84,8 +174,36 @@ export default function MembershipPage() {
       })
       return
     }
+   
+    
+    const { data:applicantData, error: insertError } = await supabase
+    .from("Applicants")
+    .insert([
+      {
+        name: formData.name,
+        email_id: formData.email,
+        phone_no: formData.phone,
+        profession:formData.profession,
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
+        pincode: Number(formData.pincode),
+        documents:uploadedUrls ,// pending admin approval
+        // Optionally, handle documents upload separately (e.g., store URLs)
+      },
+    ])
+    if (insertError) {
+      toast({
+        title: "Error",
+        description: insertError.message,
+        variant: "destructive",
+      })
+      return
+    }
+    console.log(applicantData)
     // Store form data in localStorage (in a real app, consider more secure options)
-    localStorage.setItem("membershipFormData", JSON.stringify(formData))
+    // localStorage.setItem("membershipFormData", JSON.stringify(formData))
     // In a real application, you would send the form data and documents to your backend here
     toast({
       title: "Application Submitted",
@@ -176,10 +294,24 @@ export default function MembershipPage() {
             </div>
           </div>
           <div className="space-y-2">
+            <Label htmlFor="profession" className="text-[#4A2C2A]">
+              Profession
+            </Label>
+            <Input
+              id="profession"
+              name="profession"
+              value={formData.profession}
+              onChange={handleInputChange}
+              placeholder="Enter your profession"
+              required
+              className="border-[#B22222]"
+            />
+          </div>
+          <div className="space-y-2">
             <Label className="text-[#4A2C2A]">Address</Label>
             <Input
-              name="address"
-              value={formData.address}
+              name="street"
+              value={formData.street}
               onChange={handleInputChange}
               placeholder="Street Address"
               required
@@ -253,7 +385,7 @@ export default function MembershipPage() {
           <Button
             type="submit"
             className="w-full bg-[#B22222] hover:bg-[#8B0000] text-white"
-            disabled={!acknowledged || !emailOTPSent || !phoneOTPSent || documents.length === 0}
+            disabled={!acknowledged || !emailOTPSent || !phoneOTPSent }
           >
             Submit Application
           </Button>

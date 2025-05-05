@@ -90,4 +90,3 @@ function UpdateContactPage() {
 }
 
 export default withAdminAuth(UpdateContactPage)
-
