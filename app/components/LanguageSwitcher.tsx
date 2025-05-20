@@ -1,9 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Globe } from "lucide-react"
+
+// Add TypeScript declarations for Google Translate
+declare global {
+  interface Window {
+    googleTranslateElementInit: () => void;
+    google: {
+      translate: {
+        TranslateElement: any;
+      };
+    };
+  }
+}
 
 const languages = [
   { code: "en", name: "English" },
@@ -13,13 +25,55 @@ const languages = [
 
 export function LanguageSwitcher() {
   const [currentLanguage, setCurrentLanguage] = useState("en")
+  const [isTranslateScriptLoaded, setIsTranslateScriptLoaded] = useState(false)
+
+  useEffect(() => {
+    // Check if Google Translate script is already loaded
+    if (!document.querySelector('script[src*="translate.google.com"]')) {
+      // Create a hidden div for Google Translate
+      const translateDiv = document.createElement('div');
+      translateDiv.id = 'google_translate_element';
+      translateDiv.style.display = 'none';
+      document.body.appendChild(translateDiv);
+      
+      // Define the initialization function
+      window.googleTranslateElementInit = function() {
+        new window.google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,hi,kn',
+          autoDisplay: false
+        }, 'google_translate_element');
+        
+        setIsTranslateScriptLoaded(true);
+      };
+      
+      // Load Google Translate script
+      const script = document.createElement('script');
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.head.appendChild(script);
+    } else {
+      setIsTranslateScriptLoaded(true);
+    }
+  }, []);
 
   const handleLanguageChange = (langCode: string) => {
-    setCurrentLanguage(langCode)
-    // Here you would typically update the app's language setting
-    // For now, we'll just log the change
-    console.log(`Language changed to ${langCode}`)
-  }
+    setCurrentLanguage(langCode);
+    
+    // Use cookies method (simpler and more reliable)
+    if (langCode === "en") {
+      // Clear translation cookies
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+    } else {
+      // Set translation cookies
+      document.cookie = `googtrans=/en/${langCode}`;
+      document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${window.location.hostname}`;
+    }
+    
+    // Reload page to apply translation
+    window.location.reload();
+  };
 
   return (
     <DropdownMenu>
@@ -46,4 +100,3 @@ export function LanguageSwitcher() {
     </DropdownMenu>
   )
 }
-

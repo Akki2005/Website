@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  top: 0 !important;
 }
 
 @layer utilities {
@@ -91,4 +92,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Add this to your global.css or equivalent */
+.skiptranslate {
+  display: none !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
 }
