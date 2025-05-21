@@ -17,6 +17,7 @@ declare global {
   }
 }
 
+// Language data always displayed in native script, regardless of page translation
 const languages = [
   { code: "en", name: "English" },
   { code: "hi", name: "हिंदी" },
@@ -28,6 +29,15 @@ export function LanguageSwitcher() {
   const [isTranslateScriptLoaded, setIsTranslateScriptLoaded] = useState(false)
 
   useEffect(() => {
+    // Add CSS to prevent Google Translate from affecting our language switcher
+    const style = document.createElement('style');
+    style.textContent = `
+      .goog-te-banner-frame { display: none !important; }
+      body { top: 0 !important; }
+      .notranslate { white-space: nowrap !important; }
+    `;
+    document.head.appendChild(style);
+    
     // Check if Google Translate script is already loaded
     if (!document.querySelector('script[src*="translate.google.com"]')) {
       // Create a hidden div for Google Translate
@@ -55,9 +65,45 @@ export function LanguageSwitcher() {
     } else {
       setIsTranslateScriptLoaded(true);
     }
+    
+    // Load stored language preference
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+      setCurrentLanguage(savedLanguage);
+    }
   }, []);
 
+  // Protect language names from translation
+  useEffect(() => {
+    // Check if Google Translate has affected our elements and fix them
+    const observer = new MutationObserver(() => {
+      // Fix language names in dropdown
+      document.querySelectorAll('[data-lang-name]').forEach(element => {
+        const langCode = element.getAttribute('data-lang-name');
+        const lang = languages.find(l => l.code === langCode);
+        if (lang && element.textContent !== lang.name) {
+          element.textContent = lang.name;
+        }
+      });
+      
+      // Fix current language name in button
+      const currentLangButton = document.querySelector('[data-current-lang]');
+      if (currentLangButton) {
+        const lang = languages.find(l => l.code === currentLanguage);
+        if (lang && !currentLangButton.textContent?.includes(lang.name)) {
+          currentLangButton.innerHTML = `<svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>${lang.name}`;
+        }
+      }
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    return () => observer.disconnect();
+  }, [currentLanguage]);
+
   const handleLanguageChange = (langCode: string) => {
+    // Save selected language
+    localStorage.setItem('selectedLanguage', langCode);
     setCurrentLanguage(langCode);
     
     // Use cookies method (simpler and more reliable)
@@ -80,7 +126,8 @@ export function LanguageSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-[#FFF3E0] text-[#B22222] border-2 border-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000]"
+          className="bg-[#FFF3E0] text-[#B22222] border-2 border-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000] notranslate"
+          data-current-lang
         >
           <Globe className="mr-2 h-4 w-4" />
           {languages.find((lang) => lang.code === currentLanguage)?.name || "Language"}
@@ -91,7 +138,8 @@ export function LanguageSwitcher() {
           <DropdownMenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className="text-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000] cursor-pointer"
+            className="text-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000] cursor-pointer notranslate"
+            data-lang-name={lang.code}
           >
             {lang.name}
           </DropdownMenuItem>
