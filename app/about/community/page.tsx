@@ -1,8 +1,8 @@
 "use client"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
 import { useState, useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { toast } from "@/components/ui/use-toast";
+import { createClient } from "../../../utils/supabase/client";
+import { toast } from "../../../components/ui/use-toast";
 
 interface AboutUs {
   heading:String,
