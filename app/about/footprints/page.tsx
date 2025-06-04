@@ -2,11 +2,11 @@
 
 import { useState,useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Flag, Book, Home, Globe, Laptop, Users } from "lucide-react";
 import type React from "react";
-import { createClient } from "@/utils/supabase/client";
-import { toast } from "@/components/ui/use-toast";
+import { createClient } from "../../../utils/supabase/client";
+import { toast } from "../../../components/ui/use-toast";
 
 interface TimelineEvent {
   id:number;
