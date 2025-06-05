@@ -5,7 +5,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher"
 export default function Header() {
   return (
     <header className="bg-home-secondary text-white py-6 px-4 border-b-4 border-black">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
         <div className="flex items-center">
           <div className="w-12 h-12 bg-[#FFF3E0] rounded-full mr-3"></div>
           <Link href="/" className="text-3xl font-bold">
