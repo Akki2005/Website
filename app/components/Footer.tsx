@@ -34,7 +34,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-black text-white p-4 mt-8">
+    <footer className="bg-black text-white p-4 mt-8 text-sm sm:text-base max-w-full overflow-hidden">
       <div className="container mx-auto text-center">
         <p>&copy; 2023 Mangalore Hindu Community. All rights reserved.</p>
         <p>
