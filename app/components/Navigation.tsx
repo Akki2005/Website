@@ -11,7 +11,7 @@ export default function Navigation() {
 
   return (
     <nav className="bg-[#FF9933] text-white py-2">
-      <div className="container mx-auto flex justify-center space-x-4 items-center">
+      <div className="container mx-auto flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 items-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="default" className="bg-[#B22222] hover:bg-[#8B0000] text-white">
