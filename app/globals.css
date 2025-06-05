@@ -102,3 +102,9 @@ body {
 .goog-te-banner-frame {
   display: none !important;
 }
+
+@media (max-width: 640px) {
+  html, body {
+    overflow-x: hidden;
+  }
+}
