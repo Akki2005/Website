@@ -14,12 +14,20 @@ export default function Header() {
         </div>
         <div className="flex items-center space-x-4">
           <LanguageSwitcher />
-          <Link href="/login">
+          <Link href="/login/user">
             <Button
               variant="outline"
               className="bg-[#FFF3E0] text-[#B22222] border-2 border-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000]"
             >
               Login
+            </Button>
+          </Link>
+          <Link href="/login/admin">
+            <Button
+              variant="outline"
+              className="bg-[#FFF3E0] text-[#B22222] border-2 border-[#B22222] hover:bg-[#FFE0B2] hover:text-[#8B0000]"
+            >
+              Admin Login
             </Button>
           </Link>
           <Link href="/donate">
