@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { withAdminAuth } from "@/app/components/withAdminAuth";
+
 import { createClient } from "@/utils/supabase/client";
 
 function EditMovingAnnouncementPage() {
@@ -307,4 +307,4 @@ function EditMovingAnnouncementPage() {
   );
 }
 
-export default withAdminAuth(EditMovingAnnouncementPage);
+export default EditMovingAnnouncementPage;

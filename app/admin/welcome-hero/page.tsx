@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 
 function EditWelcomeHeroPage() {
   const [title, setTitle] = useState("Welcome to Mangalore Hindu Community")
@@ -228,5 +228,5 @@ function EditWelcomeHeroPage() {
   )
 }
 
-export default withAdminAuth(EditWelcomeHeroPage)
+export default EditWelcomeHeroPage;
 

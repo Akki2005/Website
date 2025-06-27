@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 
 function ChangePasswordPage() {
   const [currentPassword, setCurrentPassword] = useState("")
@@ -104,5 +104,5 @@ function ChangePasswordPage() {
   )
 }
 
-export default withAdminAuth(ChangePasswordPage)
+export default ChangePasswordPage
 

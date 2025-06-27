@@ -16,6 +16,6 @@ export const config = {
      */
     // '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     '/community/dashboard/:path*',
-    '/admin/dashboard/:path*',
+    '/admin/:path*',
   ],
 }

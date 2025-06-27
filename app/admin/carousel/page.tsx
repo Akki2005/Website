@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 import Image from "next/image"
 import { Trash2, Upload, MoveUp, MoveDown } from "lucide-react"
 
@@ -181,5 +181,5 @@ function EditCarouselPage() {
   )
 }
 
-export default withAdminAuth(EditCarouselPage)
+export default EditCarouselPage
 
