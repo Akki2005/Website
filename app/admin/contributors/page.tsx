@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { withAdminAuth } from "@/lib/auth"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,8 +17,9 @@ interface Contributor {
 
 function ContributorsManagement() {
   const [contributors, setContributors] = useState<Contributor[]>([
-    { id: "1", name: "John Doe", role: "Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
-    { id: "2", name: "Jane Smith", role: "Designer", photoUrl: "/placeholder.svg?height=100&width=100" },
+    { id: "1", name: "Akhilesh", role: " Frontend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
+    { id: "2", name: "Charan Gowda", role: "Backend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
+    { id: "3", name: "Srujan Swamy", role: "Backend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
   ])
   const [newContributor, setNewContributor] = useState({ name: "", role: "", photoUrl: "" })
 
@@ -99,5 +100,5 @@ function ContributorsManagement() {
   )
 }
 
-export default withAdminAuth(ContributorsManagement)
+export default (ContributorsManagement)
 
