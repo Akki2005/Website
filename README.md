@@ -98,7 +98,7 @@ Before running this project, make sure you have the following:
 
 The application will be available at `http://localhost:3000`
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 ### User Authentication
 1. User enters email address or phone number
