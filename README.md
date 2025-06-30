@@ -150,10 +150,10 @@ The database is hosted on Supabase and includes the following main tables:
 ### Custom Tables
 - **Admins** - Admin information
 - **Events** - Event management data
-- **Announcements** - System announcements
+- **Announcements** - Community announcements
 - **Donors** - Donors list
 - **Footprints** - Community footprints
-- **Announcements** - System announcements
+
 
 
 *Note: Tables are managed through Supabase Dashboard or SQL Editor*
