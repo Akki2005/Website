@@ -1,7 +1,7 @@
 # Community Website Project
 
 
-A comprehensive community platform designed to connect and serve community members through seamless membership management, event coordination, and real-time announcements. Built with modern technologies to deliver exceptional user experience and secure access control.
+A comprehensive community platform designed to connect and serve community members through seamless membership management, event coordination, and real-time announcements. Built with modern technologies to deliver an exceptional user experience and secure access control.
 
 ## Features
 
@@ -9,16 +9,16 @@ A comprehensive community platform designed to connect and serve community membe
 - **Multi-factor Authentication**: Email OTP and mobile number OTP verification
 - **Role-based Access Control**: Separate login flows for users and administrators
 - **Session Management**: Secure session-based authentication using Supabase
-- **Mobile Integration**: SMS OTP delivery via Twilio API
-
+- **Phone Verification**: Advanced phone number validation and verification
 ### User Management
 - **User Registration**: Seamless onboarding with email/phone verification
 - **Admin Dashboard**: Comprehensive administrative control panel
 - **Profile Management**: User profile customization and settings
 
 ### Platform Features
+- **Multi-language Support**: Website available in English/Kannada/Hindi languages with Google Translate integration
 - **Event Management**: Create, edit, and manage events (Admin only)
-- **Announcements**: System-wide announcements .
+- **Announcements**: System-wide announcements 
 - **Real-time Updates**: Live data synchronization across sessions
 - **Responsive Design**: Mobile-first responsive user interface
 
@@ -27,7 +27,7 @@ A comprehensive community platform designed to connect and serve community membe
 ### Backend
 - **Database**: Supabase (Hosted PostgreSQL) - Cloud-hosted database with real-time features
 - **Authentication**: Supabase Auth - Modern authentication and session management
-- **SMS Service**: Twilio - Reliable SMS delivery for OTP verification
+- **Verification Services**: Twilio Verify API - Phone number verification and OTP delivery
 
 ### Frontend
 - **Framework**: Next.js 15.1.0 - React-based full-stack framework
@@ -45,7 +45,8 @@ Before running this project, make sure you have the following:
 - Node.js (v14 or higher)
 - npm or yarn
 - Supabase account (free tier available)
-- Twilio account for SMS services
+- Twilio account with Verify API enabled
+- Google Cloud account with Translate API enabled
 - Git
 
 ## 🔧 Installation
@@ -59,6 +60,8 @@ Before running this project, make sure you have the following:
 2. **Install dependencies**
    ```bash
    npm install
+   # or
+   yarn install
   
    ```
 
@@ -75,6 +78,7 @@ Before running this project, make sure you have the following:
    TWILIO_ACCOUNT_SID=your_twilio_account_sid
    TWILIO_AUTH_TOKEN=your_twilio_auth_token
    TWILIO_PHONE_NUMBER=your_twilio_phone_number
+   TWILIO_VERIFY_SERVICE_SID=your_twilio_verify_service_sid
 
      ```
 
@@ -88,6 +92,8 @@ Before running this project, make sure you have the following:
 5. **Start the development server**
    ```bash
    npm run dev
+   # or
+   yarn dev
      ```
 
 The application will be available at `http://localhost:3000`
@@ -96,15 +102,15 @@ The application will be available at `http://localhost:3000`
 
 ### User Authentication
 1. User enters email address or phone number
-2. System sends OTP via email or SMS (Twilio)
-3. User verifies OTP to complete authentication
-4. Session created and managed by Supabase
+2. System initiates verification via Twilio Verify API
+3. Member receives and enters OTP for verification
+4. Session created and managed by Supabase with appropriate permissions
 
 ### Admin Authentication
 1. Admin enters credentials (username/password)
-2. System validates credentials against database
+2. System validates credentials against Supabase database
 3. Admin session created with elevated privileges
-4. Access to administrative features enabled
+4. Access to administrative features and member management enabled
 
 ## API Endpoints
 
