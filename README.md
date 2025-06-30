@@ -44,8 +44,8 @@ Before running this project, make sure you have the following:
 
 - Node.js (v14 or higher)
 - npm or yarn
-- Supabase account (free tier available)
-- Twilio account with Verify API enabled
+- [Supabase](https://supabase.com) account (free tier available)
+- [Twilio](https://www.twilio.com/en-us) account with Verify API enabled
 - Google Cloud account with Translate API enabled
 - Git
 
