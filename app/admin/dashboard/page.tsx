@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/lib/auth"
-import CommunityPage from "@/app/admin/about/community/page"
 
+import CommunityPage from "@/app/admin/about/community/page"
+import { createClient } from "@/utils/supabase/client"
 interface ApprovalRequest {
   id: string
   type: "password" | "profile"
@@ -23,6 +23,7 @@ const dummyRequests: ApprovalRequest[] = [
 ]
 
 function AdminDashboard() {
+  const supabase=createClient();
   const router = useRouter()
   const [aboutContent, setAboutContent] = useState("Current about content...")
   const [contactInfo, setContactInfo] = useState("Current contact information...")
@@ -62,9 +63,19 @@ function AdminDashboard() {
     })
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("userType")
-    router.push("/login")
+  
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push("/login/admin")
+    } catch (error) {
+      console.error('Error signing out:', error)
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      })
+    }
   }
 
   return (
@@ -217,5 +228,5 @@ function AdminDashboard() {
   )
 }
 
-export default withAdminAuth(AdminDashboard)
+export default AdminDashboard
 

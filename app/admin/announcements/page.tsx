@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { withAdminAuth } from "@/app/components/withAdminAuth";
+
 import { createClient } from "@/utils/supabase/client";
 
 interface Announcement {
@@ -214,4 +214,4 @@ function ManageAnnouncementsPage() {
   );
 }
 
-export default withAdminAuth(ManageAnnouncementsPage);
+export default ManageAnnouncementsPage;

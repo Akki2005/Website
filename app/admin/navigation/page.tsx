@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 import { Trash2, Plus, ChevronDown, ChevronUp } from "lucide-react"
 
 interface NavItem {
@@ -285,5 +285,5 @@ function EditNavigationPage() {
   )
 }
 
-export default withAdminAuth(EditNavigationPage)
+export default EditNavigationPage;
 

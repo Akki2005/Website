@@ -9,9 +9,10 @@ interface Contributor {
 }
 
 const contributors: Contributor[] = [
-  { id: 1, name: "John Doe", role: "Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
-  { id: 2, name: "Jane Smith", role: "Designer", photoUrl: "/placeholder.svg?height=100&width=100" },
-  { id: 3, name: "Bob Johnson", role: "Content Writer", photoUrl: "/placeholder.svg?height=100&width=100" },
+  { id: 1, name: "Akhilesh", role: " Frontend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
+    { id: 2, name: "Charan Gowda", role: "Backend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
+    { id: 3, name: "Srujan Swamy", role: "Backend Developer", photoUrl: "/placeholder.svg?height=100&width=100" },
+  
 ]
 
 export default function ContributorsPage() {

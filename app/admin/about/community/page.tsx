@@ -23,14 +23,14 @@ export default function CommunityPage() {
     if (insertError) {
       toast({
         title: "Error",
-        description: "Failed to Add Footprint.",
+        description: "Failed to Add AboutUs.",
         variant: "destructive",
       });
       return;
     } else {
       toast({
         title: "Success",
-        description: "Footprint added successfully.",
+        description: "AboutUs added successfully.",
       });
     }
     setHeading("");

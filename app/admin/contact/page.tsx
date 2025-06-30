@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 
 function UpdateContactPage() {
   const [phone, setPhone] = useState("+91 824 123 4567")
@@ -89,4 +89,4 @@ function UpdateContactPage() {
   )
 }
 
-export default withAdminAuth(UpdateContactPage)
+export default UpdateContactPage

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Contribution {
@@ -136,5 +136,5 @@ function ManageContributionsPage() {
   )
 }
 
-export default withAdminAuth(ManageContributionsPage)
+export default ManageContributionsPage
 

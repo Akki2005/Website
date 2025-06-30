@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
-import { withAdminAuth } from "@/app/components/withAdminAuth"
+
 
 interface CommitteeMember {
   id: number
@@ -135,5 +135,5 @@ function ManageCommitteePage() {
   )
 }
 
-export default withAdminAuth(ManageCommitteePage)
+export default ManageCommitteePage
 
