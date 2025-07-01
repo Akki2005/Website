@@ -46,6 +46,7 @@ Before running this project, make sure you have the following:
 - npm or yarn
 - [Supabase](https://supabase.com) account (free tier available)
 - [Twilio](https://www.twilio.com/en-us) account with Verify API enabled
+- [Razorpay](https://dashboard.razorpay.com) account to manage donation
 - Google Cloud account with Translate API enabled
 - Git
 
@@ -80,6 +81,10 @@ Before running this project, make sure you have the following:
    TWILIO_PHONE_NUMBER=your_twilio_phone_number
    TWILIO_VERIFY_SERVICE_SID=your_twilio_verify_service_sid
 
+   # Razor pay Configuration
+   NEXT_PUBLIC_RAZORPAY_KEY_ID=your_razorpay_key
+   RAZORPAY_KEY_SECRET=your_razorpay_secrete
+   NEXT_PUBLIC_SITE_URL=your_website
      ```
 
 4. **Supabase Setup**
